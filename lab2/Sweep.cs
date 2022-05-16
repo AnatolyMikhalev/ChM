@@ -29,9 +29,9 @@ namespace lab2
         double Mi(double x) => ( (2 * Math.Pow(h, 2) * Qi(x) - 4) / (2 + h * Pi(x)) );
         double Ri(double x) => ( (2 - h * Pi(x)) / (2 + h * Pi(x)) );
         double FIi(double x) => ( (2 * Math.Pow(h, 2) * Fi(x)) / (2 + h * Pi(x)) );
-        double Ci(int i) => (1 / (mi[i] - ri[i] * ci[i]));
+        double Ci(int i) => (1 / (mi[i] - ri[i] * ci[i - 1]));
         double Di(int i) => (fii[i] - ri[i] * ci[i - 1] * di[i - 1]);
-        double Yi(int i) => (di[i] * (ci[i] - yi[i + 1]));
+        double Yi(int i) => (ci[i] * (di[i] - yi[i + 1]));
 
 
         public void Func()
@@ -45,7 +45,6 @@ namespace lab2
                 Reverse_stroke();
 
                 Print();
-
             }
         }
         void Forward_stroke()
@@ -69,11 +68,9 @@ namespace lab2
 
             for (int i = 1; i <= n - 1; i++)
             {
-
                 mi[i] = Mi(xi[i]);
                 ri[i] = Ri(xi[i]);
                 fii[i] = FIi(xi[i]);
-
             }
 
             ci = new double[n + 1];
@@ -90,8 +87,6 @@ namespace lab2
         }
         void Reverse_stroke()
         {
-            double x = b;
-
             h = (b - a) / n;
 
             yi = new double[n + 1];
@@ -109,17 +104,17 @@ namespace lab2
         void Print()
         {
             Console.WriteLine("----------------------------------------------------------------------------------------------------");
-            Console.WriteLine($"|   n   |   xi   |  {"yi", 17}  |   mi   |   ri   |   fii  |   ci   |   di   |");
+            Console.WriteLine($"|   i   |   xi   |  {"yi", 17}  |   mi   |   ri   |   fii  |   ci   |   di   |");
             Console.WriteLine("----------------------------------------------------------------------------------------------------");
             for (int i = 0; i <= n; i++)
             {
-                Console.WriteLine("| {0,4}  | {1,6:F3} | {2,19:F15} | {3,6:F3} | {4,6:F3} | {5,6:F3} | {6,6:F3} | {7,6:F3} |", n, xi[i], yi[i], mi[i], ri[i], fii[i], ci[i], di[i]);
+                Console.WriteLine("| {0,4}  | {1,6:F3} | {2,19:F15} | {3,6:F3} | {4,6:F3} | {5,6:F3} | {6,6:F3} | {7,6:F3} |", i, xi[i], yi[i], mi[i], ri[i], fii[i], ci[i], di[i]);
             }
             Console.WriteLine("-----------------------------------------------------------------------------------------------------\n");
-            Console.WriteLine($"y0 = {y0}; yi[0] = {yi[0]}; y0 - yi[0] = {y0 - yi[0],10:F7}\n");
+            Console.WriteLine($"y0 = {y0}; yi[0] = {yi[0]}; |y0 - yi[0]| = {Math.Abs(y0 - yi[0]),10:F7}\n");
+
+
 
         }
-
-
     }
 }
